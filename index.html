@@ -109,7 +109,7 @@ function buildLocalStatus(){
  const region=val('lsRegion');const parts=[];
  if(region)parts.push(region+(val('lsSide')&&val('lsSide')!=='не применимо'?' '+val('lsSide'):''));
  ['lsLook','lsSkin','lsPalp','lsPain','lsMove','lsDistal','lsAbd','lsExtra'].forEach(id=>{if(val(id))parts.push(val(id))});
- return parts.length?parts.join('. ').replace(/\\.\\s*$/, '')+'.':'';
+ return parts.length?parts.join('. ')+'.':'';
 }
 $('generateLocal').addEventListener('click',()=>{const t=buildLocalStatus();$('general').value=t;$('feedback').textContent=t?'Локальный статус сформирован из выбранных признаков. Проверь формулировку.':'Выбери область или хотя бы один объективный признак.';});
 $('clearLocal').addEventListener('click',()=>{['lsRegion','lsSide','lsLook','lsSkin','lsPalp','lsPain','lsMove','lsDistal','lsAbd','lsExtra'].forEach(id=>$(id).value='');$('general').value='';$('feedback').textContent='Выбор локального статуса очищен.';});
