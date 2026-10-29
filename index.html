@@ -16,15 +16,6 @@
 <div class="notice">⚠️ Не вводи ФИО, адреса, телефоны и другие идентифицирующие данные пациентов. Это вспомогательный конструктор, не диагностическая система и не замена клиническим протоколам.</div>
 <div class="layout">
 <section class="card">
-<h2>Общий статус пациента</h2>
-<div class="grid2">
-<div class="field"><label for="state">Общее состояние</label><select id="state"><option value="">Не указано</option><option>Удовлетворительное</option><option>Средней степени тяжести</option><option>Тяжёлое</option><option>Крайне тяжёлое</option></select></div>
-<div class="field"><label for="conscious">Сознание</label><select id="conscious"><option value="">Не указано</option><option>Ясное</option><option>Оглушение</option><option>Сопор</option><option>Кома</option><option>Спутанность сознания</option></select></div>
-<div class="field"><label for="skin">Кожные покровы</label><input id="skin" placeholder="Цвет, влажность, температура"></div>
-<div class="field"><label for="breath">Дыхание</label><input id="breath" placeholder="ЧДД, SpO₂, аускультация"></div>
-<div class="field"><label for="pulse">Кровообращение</label><input id="pulse" placeholder="Пульс, АД, ЧСС"></div>
-<div class="field"><label for="neuro">Неврологический статус</label><input id="neuro" placeholder="Зрачки, речь, движения"></div>
-</div>
 <h3 style="margin:14px 0 8px;font-size:16px">Локальный статус · выбор признаков</h3>
 <p class="muted">Выбирай только то, что действительно проверено при осмотре. Неотмеченные поля в текст не попадут.</p>
 <div class="grid2">
@@ -40,11 +31,11 @@
 <div class="field"><label for="lsExtra">Дополнительный признак</label><select id="lsExtra"><option value="">Не указано</option><option>крепитация не определяется</option><option>определяется крепитация</option><option>патологическая подвижность не определяется</option><option>определяется патологическая подвижность</option><option>наружного кровотечения нет</option><option>имеется наружное кровотечение</option><option>отёк при осмотре не выявлен</option><option>деформация при осмотре не выявлена</option></select></div>
 </div>
 <div class="btnrow"><button class="btn primary" id="generateLocal" type="button">Сформировать локальный статус</button><button class="btn ghost" id="clearLocal" type="button">Очистить выбор</button></div>
-<div class="field"><label for="general">Сформированный локальный статус</label><textarea id="general" readonly placeholder="Здесь появится текст по выбранным признакам"></textarea></div><div class="field"><label for="free">Дополнительный текст статуса</label><textarea id="free" placeholder="Свободное поле"></textarea></div>
+<div class="field"><label for="general">Сформированный локальный статус</label><textarea id="general" readonly placeholder="Здесь появится текст по выбранным признакам"></textarea></div>
 </section>
 <section class="card">
-<h2>Сформированный общий статус</h2>
-<p class="muted">Это общий статус. Локальный статус формируется отдельно из выбранных местных признаков ниже и не включает ЧСС, АД, ЧДД или SpO₂.</p>
+<h2>Готовая локалка</h2>
+<p class="muted">Проверь формулировки и скопируй текст. Включаются только выбранные признаки.</p>
 <div id="output" class="output" aria-live="polite">Заполни поля, затем нажми «Сформировать статус».</div>
 <div class="btnrow"><button class="btn primary" id="generate">Сформировать статус</button><button class="btn" id="copy">Копировать текст</button><button class="btn ghost" id="clear">Очистить поля</button></div>
 <div id="feedback" class="muted" role="status"></div>
@@ -104,7 +95,7 @@ function makeModule(){
  add(out,'Дополнение',val('mExtra'));return out.length?out.join('. ')+'.':'';
 }
 document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));document.querySelectorAll('[data-pane]').forEach(p=>p.hidden=p.dataset.pane!==b.dataset.tab)}));
-function build(){const o=[];add(o,'Общее состояние',val('state'));add(o,'Сознание',val('conscious'));add(o,'Кожные покровы',val('skin'));add(o,'Дыхание',val('breath'));add(o,'Кровообращение',val('pulse'));add(o,'Неврологический статус',val('neuro'));add(o,'Другие объективные данные',val('general'));return o.join('. ')+(o.length?'.':'')+((o.length&&val('free'))?'\n\n':'')+val('free')}
+function build(){return val('general')}
 function buildLocalStatus(){
  const region=val('lsRegion');const parts=[];
  if(region)parts.push(region+(val('lsSide')&&val('lsSide')!=='не применимо'?' '+val('lsSide'):''));
@@ -115,7 +106,7 @@ $('generateLocal').addEventListener('click',()=>{const t=buildLocalStatus();$('g
 $('clearLocal').addEventListener('click',()=>{['lsRegion','lsSide','lsLook','lsSkin','lsPalp','lsPain','lsMove','lsDistal','lsAbd','lsExtra'].forEach(id=>$(id).value='');$('general').value='';$('feedback').textContent='Выбор локального статуса очищен.';});
 $('generate').addEventListener('click',()=>{$('output').textContent=build()||'Заполни хотя бы одно поле.';$('feedback').textContent='Проверь текст перед использованием.'});
 $('copy').addEventListener('click',async()=>{const txt=$('output').textContent;if(!txt||txt.startsWith('Заполни')){$('feedback').textContent='Сначала сформируй статус.';return}try{await navigator.clipboard.writeText(txt);$('feedback').textContent='Текст скопирован.'}catch(e){const r=document.createElement('textarea');r.value=txt;document.body.appendChild(r);r.select();const ok=document.execCommand('copy');r.remove();$('feedback').textContent=ok?'Текст скопирован.':'Не удалось скопировать. Выдели текст вручную.'}});
-$('clear').addEventListener('click',()=>{document.querySelectorAll('input,textarea,select').forEach(e=>{if(e.type==='checkbox')e.checked=false;else e.value=''});$('output').textContent='Заполни поля, затем нажми «Сформировать статус».';$('feedback').textContent='Поля очищены.'});
+$('clear').addEventListener('click',()=>{document.querySelectorAll('input,textarea,select').forEach(e=>{if(e.type==='checkbox')e.checked=false;else e.value=''});$('output').textContent='Выбери признаки локального статуса.';$('feedback').textContent='Поля очищены.'});
 $('addModule').addEventListener('click',()=>{const t=makeModule();if(!t){$('feedback').textContent='Заполни поле или отметь находку в клиническом модуле.';return}const current=$('free').value.trim();$('free').value=current?current+'\n\n'+t:t;$('feedback').textContent='Данные модуля добавлены. Нажми «Сформировать статус».'});
 $('clearModule').addEventListener('click',()=>{document.querySelectorAll('[data-pane] input,[data-pane] textarea,[data-pane] select,#mExtra').forEach(e=>{if(e.type==='checkbox')e.checked=false;else e.value=''});$('feedback').textContent='Поля клинического модуля очищены.'});
 </script>
