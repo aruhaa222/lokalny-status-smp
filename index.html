@@ -16,7 +16,7 @@
 <div class="notice">⚠️ Не вводи ФИО, адреса, телефоны и другие идентифицирующие данные пациентов. Это вспомогательный конструктор, не диагностическая система и не замена клиническим протоколам.</div>
 <div class="layout">
 <section class="card">
-<h2>Общий статус</h2>
+<h2>Общий статус пациента</h2>
 <div class="grid2">
 <div class="field"><label for="state">Общее состояние</label><select id="state"><option value="">Не указано</option><option>Удовлетворительное</option><option>Средней степени тяжести</option><option>Тяжёлое</option><option>Крайне тяжёлое</option></select></div>
 <div class="field"><label for="conscious">Сознание</label><select id="conscious"><option value="">Не указано</option><option>Ясное</option><option>Оглушение</option><option>Сопор</option><option>Кома</option><option>Спутанность сознания</option></select></div>
@@ -43,8 +43,8 @@
 <div class="field"><label for="general">Сформированный локальный статус</label><textarea id="general" readonly placeholder="Здесь появится текст по выбранным признакам"></textarea></div><div class="field"><label for="free">Дополнительный текст статуса</label><textarea id="free" placeholder="Свободное поле"></textarea></div>
 </section>
 <section class="card">
-<h2>Сформированный статус</h2>
-<p class="muted">Текст создаётся локально в браузере. Проверь и отредактируй его перед использованием.</p>
+<h2>Сформированный общий статус</h2>
+<p class="muted">Это общий статус. Локальный статус формируется отдельно из выбранных местных признаков ниже и не включает ЧСС, АД, ЧДД или SpO₂.</p>
 <div id="output" class="output" aria-live="polite">Заполни поля, затем нажми «Сформировать статус».</div>
 <div class="btnrow"><button class="btn primary" id="generate">Сформировать статус</button><button class="btn" id="copy">Копировать текст</button><button class="btn ghost" id="clear">Очистить поля</button></div>
 <div id="feedback" class="muted" role="status"></div>
