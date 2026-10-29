@@ -16,7 +16,8 @@
 <div class="notice">⚠️ Не вводи ФИО, адреса, телефоны и другие идентифицирующие данные пациентов. Это вспомогательный конструктор, не диагностическая система и не замена клиническим протоколам.</div>
 <div class="layout">
 <section class="card">
-<h3 style="margin:14px 0 8px;font-size:16px">Локальный статус · выбор признаков</h3>
+<h2>1. Основные признаки локального статуса</h2>
+<p class="muted">Сначала выбери область и базовые объективные признаки. Затем при необходимости заполни специализированный модуль и неврологический раздел.</p>
 <p class="muted">Выбирай только то, что действительно проверено при осмотре. Неотмеченные поля в текст не попадут.</p>
 <div class="grid2">
 <div class="field"><label for="lsRegion">Область осмотра</label><select id="lsRegion"><option value="">Выбрать область</option><option>Голова</option><option>Шея</option><option>Грудная клетка</option><option>Живот</option><option>Поясничная область</option><option>Спина</option><option>Таз</option><option>Правая верхняя конечность</option><option>Левая верхняя конечность</option><option>Правая нижняя конечность</option><option>Левая нижняя конечность</option><option>Кожа и мягкие ткани</option><option>Несколько областей</option></select></div>
@@ -40,17 +41,11 @@
 <div class="btnrow"><button class="btn primary" id="generateLocal" type="button">Сформировать локальный статус</button><button class="btn ghost" id="clearLocal" type="button">Очистить выбор</button></div>
 <div class="field"><label for="general">Сформированный локальный статус</label><textarea id="general" readonly placeholder="Здесь появится текст по выбранным признакам"></textarea></div>
 </section>
-<section class="card">
-<h2>Готовая локалка</h2>
-<p class="muted">Проверь формулировки и скопируй текст. Включаются только выбранные признаки.</p>
-<div id="output" class="output" aria-live="polite">Заполни поля, затем нажми «Сформировать статус».</div>
-<div class="btnrow"><button class="btn primary" id="generate">Сформировать статус</button><button class="btn" id="copy">Копировать текст</button><button class="btn ghost" id="clear">Очистить поля</button></div>
-<div id="feedback" class="muted" role="status"></div>
-</section>
+
 </div>
 <section class="module" id="clinical">
-<h2>Клинический конструктор</h2>
-<p class="muted">Выбери модуль, заполни необходимые поля и добавь описание в общий статус.</p>
+<h2>2. Уточняющий клинический модуль</h2>
+<p class="muted">Выбери подходящий раздел: травма, живот, рана, ожог или конечность / сустав. Заполняй только то, что осмотрено.</p>
 <div class="tabs" role="group" aria-label="Клинические модули">
 <button class="tab" data-tab="injury" aria-pressed="true">Травма</button><button class="tab" data-tab="abdomen" aria-pressed="false">Живот</button><button class="tab" data-tab="wound" aria-pressed="false">Рана</button><button class="tab" data-tab="burn" aria-pressed="false">Ожог</button><button class="tab" data-tab="limb" aria-pressed="false">Конечность / сустав</button>
 </div>
@@ -83,7 +78,14 @@
 <div class="grid2"><div class="field"><label for="lLocation">Конечность / сустав и сторона</label><input id="lLocation"></div><div class="field"><label for="lCirc">Окружность (см)</label><input id="lCirc" inputmode="decimal"></div><div class="field"><label for="lMotion">Движения</label><input id="lMotion"></div><div class="field"><label for="lDistal">Дистальное кровообращение / чувствительность</label><input id="lDistal"></div></div><div class="field"><label for="lExtra">Дополнительные находки</label><textarea id="lExtra"></textarea></div>
 </div>
 <div class="field"><label for="mExtra">Дополнение к выбранному модулю</label><textarea id="mExtra" placeholder="Дополнительные фактические находки"></textarea></div>
-<div class="btnrow"><button class="btn primary" id="addModule">Добавить данные модуля в статус</button><button class="btn ghost" id="clearModule">Очистить модуль</button></div>
+<div class="btnrow"><button class="btn primary" id="addModule">Добавить данные модуля в локалку</button><button class="btn ghost" id="clearModule">Очистить модуль</button></div>
+</section>
+<section class="card">
+<h2>3. Готовая локалка</h2>
+<p class="muted">После выбора признаков нажми «Сформировать локальный статус», проверь текст и скопируй. Неотмеченные находки не добавляются.</p>
+<div id="output" class="output" aria-live="polite">Заполни поля, затем нажми «Сформировать статус».</div>
+<div class="btnrow"><button class="btn primary" id="generate">Сформировать статус</button><button class="btn" id="copy">Копировать текст</button><button class="btn ghost" id="clear">Очистить поля</button></div>
+<div id="feedback" class="muted" role="status"></div>
 </section>
 <p class="footer">Все поля обрабатываются в этой странице. Не сохраняйте здесь персональные данные пациентов. Перед использованием проверьте точность формулировок и соответствие локальным протоколам.</p>
 </main>
