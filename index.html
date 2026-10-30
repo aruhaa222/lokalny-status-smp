@@ -60,7 +60,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #f29aa0;outline-offset
 <div class="grid2">
 <div class="field"><label for="orientation">Ориентировка</label><select id="orientation"><option value="">Не оценивалась</option><option value="Ориентирован в месте, времени и собственной личности.">Ориентирован полностью</option><option value="Дезориентирован во времени.">Дезориентирован во времени</option><option value="Дезориентирован в месте.">Дезориентирован в месте</option><option value="Дезориентирован в собственной личности.">Дезориентирован в личности</option></select></div>
 <div class="field"><label for="answers">Ответы на вопросы</label><select id="answers"><option value="">Не оценивались</option><option value="На вопросы отвечает правильно и чётко.">Правильно и чётко</option><option value="На вопросы отвечает замедленно.">Замедленно</option><option value="На вопросы отвечает неадекватно.">Неадекватно</option><option value="На вопросы не отвечает.">Не отвечает</option></select></div>
-<div class="field"><label for="gcs">Шкала Глазго</label><select id="gcs"><option value="">Не оценивалась</option><option>15</option><option>14</option><option>13</option><option>12</option><option>11</option><option>10</option><option>9</option><option>8</option><option>7</option><option>6</option><option>5</option><option>4</option><option>3</option></select></div>
+<div class="field"><label for="gcs">Шкала комы Глазго (ШКГ)</label><select id="gcs"><option value="">Не оценивалась</option><option>15</option><option>14</option><option>13</option><option>12</option><option>11</option><option>10</option><option>9</option><option>8</option><option>7</option><option>6</option><option>5</option><option>4</option><option>3</option></select><div id="gcsLevel" class="muted" aria-live="polite">Выбери балл, чтобы увидеть ориентировочную характеристику уровня сознания.</div></div>
 <div class="field"><label for="speech">Речь и глотание</label><select id="speech"><option value="">Не оценивались</option><option value="Речь и глотание не нарушены.">Не нарушены</option><option value="Отмечается нарушение речи.">Нарушение речи</option><option value="Отмечается нарушение глотания.">Нарушение глотания</option><option value="Отмечаются нарушения речи и глотания.">Нарушены речь и глотание</option></select></div>
 </div>
 <h3>Неврологический статус</h3>
@@ -165,16 +165,19 @@ function makeModule(){
 }
 document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));document.querySelectorAll('[data-pane]').forEach(p=>p.hidden=p.dataset.pane!==b.dataset.tab)}));
 function build(){return val('general')}
+function gcsDescription(score){const n=Number(score);if(!score)return '';if(n===15)return '15 баллов: соответствует ясному сознанию по ШКГ';if(n>=13)return '13–14 баллов: нарушение сознания, ориентировочно оглушение';if(n>=9)return '9–12 баллов: выраженное угнетение сознания, ориентировочно сопор';return '3–8 баллов: кома (тяжёлое угнетение сознания)'}
+function updateGcsLevel(){const el=$('gcsLevel');if(el)el.textContent=gcsDescription(val('gcs'))||'Выбери балл, чтобы увидеть ориентировочную характеристику уровня сознания.'}
+$('gcs').addEventListener('change',updateGcsLevel);
 function buildLocalStatus(){
  const ids=['conscious','orientation','answers','gcs','speech','face','pupils','tone','strength','reflexes','sensation','coordination','meningeal','focal','chest','breathing','heart','edema','abdomen','abdPalp','peritoneal','skin','rash'];
  const parts=[];
  ids.forEach(id=>{const v=val(id);if(v)parts.push(v)});
- if(val('gcs')){const i=parts.indexOf(val('gcs'));if(i>=0)parts[i]='По шкале Глазго '+val('gcs')+' баллов.'}
+ if(val('gcs')){const i=parts.indexOf(val('gcs'));if(i>=0)parts[i]='ШКГ '+val('gcs')+' баллов ('+gcsDescription(val('gcs'))+').'}
  if(val('otherFindings'))parts.push(val('otherFindings').replace(/\s*$/,'')+'.');
  return parts.join(' ').replace(/\s+/g,' ').trim();
 }
 $('generateLocal').addEventListener('click',()=>{const t=buildLocalStatus();$('general').value=t;$('feedback').textContent=t?'Локальный статус сформирован из выбранных признаков. Проверь формулировку.':'Выбери область или хотя бы один объективный признак.';});
-$('clearLocal').addEventListener('click',()=>{['conscious','orientation','answers','gcs','speech','face','pupils','tone','strength','reflexes','sensation','coordination','meningeal','focal','chest','breathing','heart','edema','abdomen','abdPalp','peritoneal','skin','rash','otherFindings'].forEach(id=>$(id).value='');$('general').value='';$('feedback').textContent='Выбор локального статуса очищен.';});
+$('clearLocal').addEventListener('click',()=>{['conscious','orientation','answers','gcs','speech','face','pupils','tone','strength','reflexes','sensation','coordination','meningeal','focal','chest','breathing','heart','edema','abdomen','abdPalp','peritoneal','skin','rash','otherFindings'].forEach(id=>$(id).value='');$('general').value='';updateGcsLevel();$('feedback').textContent='Выбор локального статуса очищен.';});
 $('generate').addEventListener('click',()=>{$('output').value=build()||'Заполни хотя бы одно поле.';$('feedback').textContent='Проверь текст перед использованием.'});
 $('copy').addEventListener('click',async()=>{const txt=$('output').value;if(!txt||txt.startsWith('Заполни')){$('feedback').textContent='Сначала сформируй статус.';return}try{await navigator.clipboard.writeText(txt);$('feedback').textContent='Текст скопирован.'}catch(e){const r=document.createElement('textarea');r.value=txt;document.body.appendChild(r);r.select();const ok=document.execCommand('copy');r.remove();$('feedback').textContent=ok?'Текст скопирован.':'Не удалось скопировать. Выдели текст вручную.'}});
 $('clear').addEventListener('click',()=>{document.querySelectorAll('input,textarea,select').forEach(e=>{if(e.type==='checkbox')e.checked=false;else e.value=''});$('output').value='';$('feedback').textContent='Поля очищены.'});
