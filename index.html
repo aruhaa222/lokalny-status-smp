@@ -132,8 +132,8 @@ function buildLocalStatus(){
  const parts=[];
  ids.forEach(id=>{const v=val(id);if(v)parts.push(v)});
  if(val('gcs')){const i=parts.indexOf(val('gcs'));if(i>=0)parts[i]='По шкале Глазго '+val('gcs')+' баллов.'}
- if(val('otherFindings'))parts.push(val('otherFindings').replace(/\\s*$/,'')+'.');
- return parts.join(' ').replace(/\\s+/g,' ').trim();
+ if(val('otherFindings'))parts.push(val('otherFindings').replace(/\s*$/,'')+'.');
+ return parts.join(' ').replace(/\s+/g,' ').trim();
 }
 $('generateLocal').addEventListener('click',()=>{const t=buildLocalStatus();$('general').value=t;$('feedback').textContent=t?'Локальный статус сформирован из выбранных признаков. Проверь формулировку.':'Выбери область или хотя бы один объективный признак.';});
 $('clearLocal').addEventListener('click',()=>{['conscious','orientation','answers','gcs','speech','face','pupils','tone','strength','reflexes','sensation','coordination','meningeal','focal','chest','breathing','heart','edema','abdomen','abdPalp','peritoneal','skin','rash','otherFindings'].forEach(id=>$(id).value='');$('general').value='';$('feedback').textContent='Выбор локального статуса очищен.';});
