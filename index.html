@@ -150,7 +150,7 @@ const clinicalLocations={
  injury:['Голова','Лицо','Шея','Грудная клетка','Спина','Поясничная область','Таз','Правая верхняя конечность','Левая верхняя конечность','Правая нижняя конечность','Левая нижняя конечность','Правая рука (плечо, предплечье, кисть)','Левая рука (плечо, предплечье, кисть)','Правая нога (бедро, голень, стопа)','Левая нога (бедро, голень, стопа)','Несколько анатомических областей','Другая область'],
  burn:['Голова и шея','Передняя поверхность туловища','Задняя поверхность туловища','Правая верхняя конечность','Левая верхняя конечность','Правая нижняя конечность','Левая нижняя конечность','Правая кисть','Левая кисть','Правая стопа','Левая стопа','Промежность','Несколько анатомических областей','Другая область']
 };
-$$('cKind').addEventListener('change',()=>{
+$('cKind').addEventListener('change',()=>{
  const kind=val('cKind'),select=$('cLocation');
  select.innerHTML='<option value="">Выбрать анатомическую область</option>';
  (clinicalLocations[kind]||[]).forEach(name=>{const option=document.createElement('option');option.textContent=name;option.value=name;select.appendChild(option)});
@@ -160,18 +160,23 @@ $('addClinical').addEventListener('click',()=>{
  const kind=val('cKind'),place=val('cLocation');
  if(!kind||!place){$('feedback').textContent='Выбери характер повреждения и анатомическую область.';return}
  let sentence='';
- if(kind==='burn')sentence='При осмотре отмечается ожог в области '+place.toLowerCase()+'.';
- else{
-  const injury=val('cInjuryType');
-  const descriptions={'Подозрение на перелом':'травма, подозрение на перелом','Подозрение на вывих':'травма, подозрение на вывих','Ушиб':'ушиб','Растяжение / повреждение связок':'повреждение связочного аппарата','Другая травма':'травма'};
+ if(kind==='burn'){
+  sentence='При осмотре отмечается ожоговая поверхность в области '+place.toLowerCase()+'.';
+ }else{
   const findings=[];
-  if($('cDeform').checked)findings.push('деформация');if($('cMotion').checked)findings.push('ограничение движений');if($('cEdema').checked)findings.push('отёк');if($('cHematoma').checked)findings.push('гематома');if($('cPain').checked)findings.push('болезненность при пальпации');if($('cWound').checked)findings.push('нарушение целостности кожных покровов');
-  sentence='При осмотре отмечается '+(descriptions[injury]||'травма')+' в области '+place.toLowerCase();
-  if(findings.length)sentence+='; определяется '+findings.join(', ');
-  sentence+='.';
+  if($('cDeform').checked)findings.push('деформация');
+  if($('cMotion').checked)findings.push('ограничение движений');
+  if($('cEdema').checked)findings.push('отёк');
+  if($('cHematoma').checked)findings.push('гематома');
+  if($('cPain').checked)findings.push('болезненность при пальпации');
+  if($('cWound').checked)findings.push('нарушение целостности кожных покровов');
+  if(!findings.length){$('feedback').textContent='Отметь объективные признаки, выявленные при осмотре.';return}
+  sentence='При осмотре отмечается '+findings.join(', ')+' в области '+place.toLowerCase()+'.';
  }
- const current=$('general').value.trim();$('general').value=current?current+'\\n\\n'+sentence:sentence;$('output').value=$('general').value;
- $('feedback').textContent='Описание повреждения добавлено в локальный статус.';
+ const current=$('general').value.trim();
+ $('general').value=current?current+'\n\n'+sentence:sentence;
+ $('output').value=$('general').value;
+ $('feedback').textContent='Описание добавлено в локальный статус.';
 });
 $('clearClinical').addEventListener('click',()=>{
  $('cKind').value='';$('cLocation').innerHTML='<option value="">Сначала выбери характер повреждения</option>';$('cLocation').disabled=true;
