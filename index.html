@@ -174,13 +174,57 @@ const val=id=>{const e=$(id);return e&&e.value?e.value.trim():''};
 const add=(arr,label,v)=>{if(v)arr.push(label+': '+v)};
 const checked=id=>!!($(id)&&$(id).checked);
 function makeModule(){
- const active=document.querySelector('[data-tab][aria-pressed="true"]');const type=active?active.dataset.tab:'injury';const out=[];
- if(type==='injury'){add(out,'Вид травмы',val('iType'));add(out,'Механизм',val('iMechanism'));add(out,'Локализация', [val('iLocation'),val('iSide'),val('iBoneSegment'),val('iLocationExtra')].filter(Boolean).join(', '));add(out,'Время травмы',val('iTime'));const d=[];if(val('iLength'))d.push('длина '+val('iLength')+' см');if(val('iWidth'))d.push('ширина '+val('iWidth')+' см');add(out,'Размеры',d.join(', '));add(out,'Внешние признаки',val('iSigns'));add(out,'Болезненность',val('iPain'));[['iDeform','Видимая деформация'],['iEdema','Отёк'],['iHematoma','Гематома'],['iOpen','Нарушение целостности кожи'],['iMotion','Ограничение движений'],['iNV','Дистальные чувствительность / кровообращение оценены']].forEach(([id,l])=>{if(checked(id))out.push(l)});}
- if(type==='abdomen'){add(out,'Область живота',val('aLocation'));add(out,'Длительность',val('aDuration'));add(out,'Характер боли по словам пациента',val('aCharacter'));add(out,'Иррадиация',val('aRadiation'));add(out,'Данные пальпации',val('aPalp'));add(out,'Симптом раздражения брюшины',val('aRebound'));add(out,'Симптом Мёрфи',val('aMurphy'));add(out,'Симптом Ровзинга',val('aRovsing'));add(out,'Псоас-симптом',val('aPsoas'));add(out,'Симптом поколачивания',val('aPastern'));add(out,'Дополнительные данные',val('aExtra'));}
- if(type==='wound'){add(out,'Тип повреждения',val('wType'));add(out,'Локализация раны',[val('wLocation'),val('wSide'),val('wLocationExtra')].filter(Boolean).join(', '));const d=[];if(val('wLength'))d.push('длина '+val('wLength')+' см');if(val('wWidth'))d.push('ширина '+val('wWidth')+' см');add(out,'Размеры',d.join(', '));add(out,'Глубина',val('wDepth'));add(out,'Кровотечение',val('wBleed'));add(out,'Края, дно и окружающие ткани',val('wEdges'));}
- if(type==='burn'){add(out,'Фактор ожога',val('bCause'));add(out,'Локализация ожога',val('bLocation'));add(out,'Оценённая площадь',val('bArea')?val('bArea')+'%':'');add(out,'Степень / глубина',val('bDepth'));add(out,'Внешний вид',val('bAppearance'));}
- if(type==='limb'){add(out,'Локализация',[val('lLocation'),val('lSide'),val('lBoneSegment')].filter(Boolean).join(', '));add(out,'Окружность',val('lCirc')?val('lCirc')+' см':'');add(out,'Движения',val('lMotion'));add(out,'Дистальное кровообращение / чувствительность',val('lDistal'));add(out,'Дополнительные находки',val('lExtra'));}
- add(out,'Дополнение',val('mExtra'));return out.length?out.join('. ')+'.':'';
+ const active=document.querySelector('[data-tab][aria-pressed="true"]');
+ const type=active?active.dataset.tab:'injury';
+ const parts=[];
+ const addText=v=>{if(v)parts.push(v.replace(/[.;,\\s]+$/,'').trim())};
+ const location=(...ids)=>ids.map(val).filter(Boolean).join(', ');
+ const dimensions=(length,width)=>[length?'длина '+length+' см':'',width?'ширина '+width+' см':''].filter(Boolean).join(', ');
+ if(type==='injury'){
+  const kind=val('iType'),mechanism=val('iMechanism'),place=location('iLocation','iSide','iBoneSegment','iLocationExtra');
+  if(kind)addText('Отмечается '+kind.toLowerCase()+' повреждение'+(place?' в области: '+place:''));
+  if(mechanism)addText('Обстоятельства / механизм травмы: '+mechanism);
+  if(val('iTime'))addText('Со слов пациента, травма получена '+val('iTime'));
+  const size=dimensions(val('iLength'),val('iWidth'));if(size)addText('Размеры повреждения: '+size);
+  if(val('iSigns'))addText('Внешние признаки: '+val('iSigns'));
+  if(val('iPain'))addText('При оценке болезненности: '+val('iPain'));
+  const signs=[];if(checked('iDeform'))signs.push('видимая деформация');if(checked('iEdema'))signs.push('отёк');if(checked('iHematoma'))signs.push('гематома');if(checked('iOpen'))signs.push('нарушение целостности кожных покровов');if(checked('iMotion'))signs.push('ограничение движений');if(checked('iNV'))signs.push('дистальная чувствительность и кровообращение оценены');
+  if(signs.length)addText('При осмотре отмечаются: '+signs.join(', '));
+ }
+ if(type==='abdomen'){
+  const place=val('aLocation'),duration=val('aDuration'),character=val('aCharacter'),radiation=val('aRadiation');
+  const pain=[duration?'длительность '+duration:'',character?'характер '+character:'',radiation?'иррадиация '+radiation:''].filter(Boolean).join(', ');
+  if(place)addText('Болевые ощущения локализуются: '+place);
+  if(pain)addText('Со слов пациента: '+pain);
+  if(val('aPalp'))addText('При пальпации живота: '+val('aPalp'));
+  [['aRebound','Симптом раздражения брюшины'],['aMurphy','Симптом Мёрфи'],['aRovsing','Симптом Ровзинга'],['aPsoas','Псоас-симптом'],['aPastern','Симптом поколачивания']].forEach(([id,label])=>{if(val(id))addText(label+': '+val(id).toLowerCase())});
+  if(val('aExtra'))addText('Дополнительно: '+val('aExtra'));
+ }
+ if(type==='wound'){
+  const kind=val('wType'),place=location('wLocation','wSide','wLocationExtra');
+  if(kind||place)addText('Имеется '+(kind?kind.toLowerCase()+' рана':'рана')+(place?' в области '+place:''));
+  const size=dimensions(val('wLength'),val('wWidth'));if(size)addText('Размеры раны: '+size);
+  if(val('wDepth'))addText('Глубина раны: '+val('wDepth'));
+  if(val('wBleed'))addText('Кровотечение: '+val('wBleed').toLowerCase());
+  if(val('wEdges'))addText('Состояние краёв, дна раны и окружающих тканей: '+val('wEdges'));
+ }
+ if(type==='burn'){
+  if(val('bCause'))addText('Ожог получен вследствие воздействия: '+val('bCause'));
+  if(val('bLocation'))addText('Ожоговая поверхность расположена: '+val('bLocation').toLowerCase());
+  if(val('bArea'))addText('Оценочная площадь поражения составляет '+val('bArea')+'%');
+  if(val('bDepth'))addText('Степень / глубина поражения: '+val('bDepth'));
+  if(val('bAppearance'))addText('При осмотре: '+val('bAppearance'));
+ }
+ if(type==='limb'){
+  const place=location('lLocation','lSide','lBoneSegment');
+  if(place)addText('В области '+place+' отмечаются следующие изменения');
+  if(val('lCirc'))addText('Окружность конечности на уровне измерения составляет '+val('lCirc')+' см');
+  if(val('lMotion'))addText('Объём и характер движений: '+val('lMotion'));
+  if(val('lDistal'))addText('Дистальное кровообращение и чувствительность: '+val('lDistal'));
+  if(val('lExtra'))addText('Дополнительные данные осмотра: '+val('lExtra'));
+ }
+ if(val('mExtra'))addText(val('mExtra'));
+ return parts.length?parts.join('. ')+'.':'';
 }
 document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));document.querySelectorAll('[data-pane]').forEach(p=>p.hidden=p.dataset.pane!==b.dataset.tab)}));
 function build(){return val('general')}
