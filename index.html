@@ -181,15 +181,34 @@ function makeModule(){
  const location=(...ids)=>ids.map(val).filter(Boolean).join(', ');
  const dimensions=(length,width)=>[length?'длина '+length+' см':'',width?'ширина '+width+' см':''].filter(Boolean).join(', ');
  if(type==='injury'){
-  const kind=val('iType'),mechanism=val('iMechanism'),place=location('iLocation','iSide','iBoneSegment','iLocationExtra');
-  if(kind)addText('Отмечается '+kind.toLowerCase()+' повреждение'+(place?' в области: '+place:''));
-  if(mechanism)addText('Обстоятельства / механизм травмы: '+mechanism);
-  if(val('iTime'))addText('Со слов пациента, травма получена '+val('iTime'));
+  const kind=val('iType'),place=location('iLocation','iSide','iBoneSegment','iLocationExtra');
+  const signs=[];
+  if(checked('iDeform'))signs.push('деформация');
+  if(checked('iEdema'))signs.push('отёк');
+  if(checked('iHematoma'))signs.push('гематома');
+  if(checked('iOpen'))signs.push('нарушение целостности кожных покровов');
+  if(checked('iMotion'))signs.push('ограничение движений');
+  if(val('iSigns'))signs.push(val('iSigns').replace(/[.;,\\s]+$/,''));
+  const pain=val('iPain');
+  let opening='';
+  if(kind==='Подозрение на перелом')opening='При осмотре отмечается травма';
+  else if(kind==='Подозрение на вывих')opening='При осмотре отмечаются признаки возможного вывиха';
+  else if(['Резаная травма','Уколотая травма','Рваная травма','Укус'].includes(kind))opening='При осмотре отмечается '+kind.toLowerCase()+' рана';
+  else if(kind==='Ушиб')opening='При осмотре отмечается ушиб';
+  else if(kind==='Растяжение / повреждение связок')opening='При осмотре отмечаются признаки повреждения связочного аппарата';
+  else if(kind==='Сдавление')opening='При осмотре отмечаются последствия сдавления';
+  else if(kind==='Сочетанная травма')opening='При осмотре отмечаются признаки сочетанной травмы';
+  else if(kind)opening='При осмотре отмечается '+kind.toLowerCase();
+  else opening='При осмотре';
+  let sentence=opening;
+  if(place)sentence+=' в области '+place;
+  if(signs.length)sentence+=(kind?'':' отмечаются')+(kind?' с признаками: ':' следующие признаки: ')+signs.join(', ');
+  if(pain)sentence+=(signs.length?'; ':'; ')+'болезненность '+pain.toLowerCase();
+  if(sentence!==opening||kind)addText(sentence);
+  if(val('iMechanism'))addText('Со слов пациента, травма получена '+val('iMechanism'));
+  if(val('iTime'))addText('Время получения травмы: '+val('iTime'));
   const size=dimensions(val('iLength'),val('iWidth'));if(size)addText('Размеры повреждения: '+size);
-  if(val('iSigns'))addText('Внешние признаки: '+val('iSigns'));
-  if(val('iPain'))addText('При оценке болезненности: '+val('iPain'));
-  const signs=[];if(checked('iDeform'))signs.push('видимая деформация');if(checked('iEdema'))signs.push('отёк');if(checked('iHematoma'))signs.push('гематома');if(checked('iOpen'))signs.push('нарушение целостности кожных покровов');if(checked('iMotion'))signs.push('ограничение движений');if(checked('iNV'))signs.push('дистальная чувствительность и кровообращение оценены');
-  if(signs.length)addText('При осмотре отмечаются: '+signs.join(', '));
+  if(checked('iNV'))addText('Дистальная чувствительность и периферическое кровообращение оценены');
  }
  if(type==='abdomen'){
   const place=val('aLocation'),duration=val('aDuration'),character=val('aCharacter'),radiation=val('aRadiation');
