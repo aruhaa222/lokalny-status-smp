@@ -116,6 +116,16 @@ input:focus,select:focus,textarea:focus{outline:2px solid #f29aa0;outline-offset
 
 </div>
 
+<section class="card" id="clinical">
+<h2>2. Область повреждения</h2>
+<p class="muted">Выбери, что описываем, затем укажи анатомическую область. В текст попадут только выбранные данные.</p>
+<div class="grid2">
+ <div class="field"><label for="cKind">Характер повреждения</label><select id="cKind"><option value="">Выбрать</option><option value="injury">Травма</option><option value="burn">Ожог</option></select></div>
+ <div class="field"><label for="cLocation">Конечность / анатомическая область</label><select id="cLocation" disabled><option value="">Сначала выбери характер повреждения</option></select></div>
+</div>
+<div class="btnrow"><button class="btn primary" id="addClinical" type="button">Добавить в локальный статус</button><button class="btn ghost" id="clearClinical" type="button">Очистить модуль</button></div>
+</section>
+
 <section class="card">
 <h2>3. Готовая локалка</h2>
 <p class="muted">После выбора признаков нажми «Сформировать локальный статус», проверь текст и скопируй. Неотмеченные находки не добавляются.</p>
@@ -129,6 +139,31 @@ input:focus,select:focus,textarea:focus{outline:2px solid #f29aa0;outline-offset
 const $=id=>document.getElementById(id);
 const val=id=>{const e=$(id);return e&&e.value?e.value.trim():''};
 function build(){return val('general')}
+
+const clinicalLocations={
+ injury:['Голова','Лицо','Шея','Грудная клетка','Спина','Поясничная область','Таз','Правая верхняя конечность','Левая верхняя конечность','Правая нижняя конечность','Левая нижняя конечность','Правая рука (плечо, предплечье, кисть)','Левая рука (плечо, предплечье, кисть)','Правая нога (бедро, голень, стопа)','Левая нога (бедро, голень, стопа)','Несколько анатомических областей','Другая область'],
+ burn:['Голова и шея','Передняя поверхность туловища','Задняя поверхность туловища','Правая верхняя конечность','Левая верхняя конечность','Правая нижняя конечность','Левая нижняя конечность','Правая кисть','Левая кисть','Правая стопа','Левая стопа','Промежность','Несколько анатомических областей','Другая область']
+};
+$('cKind').addEventListener('change',()=>{
+ const kind=val('cKind'),select=$('cLocation');
+ select.innerHTML='<option value="">Выбрать анатомическую область</option>';
+ (clinicalLocations[kind]||[]).forEach(name=>{const option=document.createElement('option');option.textContent=name;option.value=name;select.appendChild(option)});
+ select.disabled=!kind;
+});
+$('addClinical').addEventListener('click',()=>{
+ const kind=val('cKind'),place=val('cLocation');
+ if(!kind||!place){$('feedback').textContent='Выбери характер повреждения и анатомическую область.';return}
+ const sentence=kind==='injury'?'При осмотре отмечается травма в области '+place.toLowerCase()+'.':'При осмотре отмечается ожог в области '+place.toLowerCase()+'.';
+ const current=$('general').value.trim();
+ $('general').value=current?current+'\n\n'+sentence:sentence;
+ $('output').value=$('general').value;
+ $('feedback').textContent='Область повреждения добавлена в локальный статус.';
+});
+$('clearClinical').addEventListener('click',()=>{
+ $('cKind').value='';$('cLocation').innerHTML='<option value="">Сначала выбери характер повреждения</option>';$('cLocation').disabled=true;
+ $('feedback').textContent='Выбор второго модуля очищен.';
+});
+
 function gcsDescription(score){const n=Number(score);if(!score)return '';if(n===15)return '15 баллов: максимальная сумма по ШКГ';if(n>=13)return '13–14 баллов: лёгкое нарушение по сумме ШКГ';if(n>=9)return '9–12 баллов: умеренное нарушение по сумме ШКГ';return '3–8 баллов: тяжёлое нарушение по сумме ШКГ'}
 function updateGcsLevel(){
  const hidden=$('gcs'),el=$('gcsLevel'),manual=$('gcsManualMode').checked;
