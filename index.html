@@ -123,6 +123,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid #f29aa0;outline-offset
  <div class="field"><label for="cKind">Характер повреждения</label><select id="cKind"><option value="">Выбрать</option><option value="injury">Травма</option><option value="burn">Ожог</option></select></div>
  <div class="field"><label for="cLocation">Конечность / анатомическая область</label><select id="cLocation" disabled><option value="">Сначала выбери характер повреждения</option></select></div>
 </div>
+<div id="cInjuryDetails" hidden>
+ <div class="field"><label for="cInjuryType">Вид травмы</label><select id="cInjuryType"><option value="">Не уточнять</option><option>Подозрение на перелом</option><option>Подозрение на вывих</option><option>Ушиб</option><option>Растяжение / повреждение связок</option><option>Другая травма</option></select></div>
+ <div class="field"><label>Объективные признаки при осмотре</label><div class="checks">
+  <label class="check"><input type="checkbox" id="cDeform">Деформация</label><label class="check"><input type="checkbox" id="cMotion">Ограничение движений</label><label class="check"><input type="checkbox" id="cEdema">Отёк</label><label class="check"><input type="checkbox" id="cHematoma">Гематома</label><label class="check"><input type="checkbox" id="cPain">Болезненность при пальпации</label><label class="check"><input type="checkbox" id="cWound">Нарушение целостности кожи</label>
+ </div></div>
+</div>
 <div class="btnrow"><button class="btn primary" id="addClinical" type="button">Добавить в локальный статус</button><button class="btn ghost" id="clearClinical" type="button">Очистить модуль</button></div>
 </section>
 
@@ -144,26 +150,33 @@ const clinicalLocations={
  injury:['Голова','Лицо','Шея','Грудная клетка','Спина','Поясничная область','Таз','Правая верхняя конечность','Левая верхняя конечность','Правая нижняя конечность','Левая нижняя конечность','Правая рука (плечо, предплечье, кисть)','Левая рука (плечо, предплечье, кисть)','Правая нога (бедро, голень, стопа)','Левая нога (бедро, голень, стопа)','Несколько анатомических областей','Другая область'],
  burn:['Голова и шея','Передняя поверхность туловища','Задняя поверхность туловища','Правая верхняя конечность','Левая верхняя конечность','Правая нижняя конечность','Левая нижняя конечность','Правая кисть','Левая кисть','Правая стопа','Левая стопа','Промежность','Несколько анатомических областей','Другая область']
 };
-$('cKind').addEventListener('change',()=>{
+$$('cKind').addEventListener('change',()=>{
  const kind=val('cKind'),select=$('cLocation');
  select.innerHTML='<option value="">Выбрать анатомическую область</option>';
  (clinicalLocations[kind]||[]).forEach(name=>{const option=document.createElement('option');option.textContent=name;option.value=name;select.appendChild(option)});
- select.disabled=!kind;
+ select.disabled=!kind;$('cInjuryDetails').hidden=kind!=='injury';
 });
 $('addClinical').addEventListener('click',()=>{
  const kind=val('cKind'),place=val('cLocation');
  if(!kind||!place){$('feedback').textContent='Выбери характер повреждения и анатомическую область.';return}
- const sentence=kind==='injury'?'При осмотре отмечается травма в области '+place.toLowerCase()+'.':'При осмотре отмечается ожог в области '+place.toLowerCase()+'.';
- const current=$('general').value.trim();
- $('general').value=current?current+'\n\n'+sentence:sentence;
- $('output').value=$('general').value;
- $('feedback').textContent='Область повреждения добавлена в локальный статус.';
+ let sentence='';
+ if(kind==='burn')sentence='При осмотре отмечается ожог в области '+place.toLowerCase()+'.';
+ else{
+  const injury=val('cInjuryType');
+  const descriptions={'Подозрение на перелом':'травма, подозрение на перелом','Подозрение на вывих':'травма, подозрение на вывих','Ушиб':'ушиб','Растяжение / повреждение связок':'повреждение связочного аппарата','Другая травма':'травма'};
+  const findings=[];
+  if($('cDeform').checked)findings.push('деформация');if($('cMotion').checked)findings.push('ограничение движений');if($('cEdema').checked)findings.push('отёк');if($('cHematoma').checked)findings.push('гематома');if($('cPain').checked)findings.push('болезненность при пальпации');if($('cWound').checked)findings.push('нарушение целостности кожных покровов');
+  sentence='При осмотре отмечается '+(descriptions[injury]||'травма')+' в области '+place.toLowerCase();
+  if(findings.length)sentence+='; определяется '+findings.join(', ');
+  sentence+='.';
+ }
+ const current=$('general').value.trim();$('general').value=current?current+'\\n\\n'+sentence:sentence;$('output').value=$('general').value;
+ $('feedback').textContent='Описание повреждения добавлено в локальный статус.';
 });
 $('clearClinical').addEventListener('click',()=>{
  $('cKind').value='';$('cLocation').innerHTML='<option value="">Сначала выбери характер повреждения</option>';$('cLocation').disabled=true;
- $('feedback').textContent='Выбор второго модуля очищен.';
+ $('cInjuryType').value='';document.querySelectorAll('#cInjuryDetails input[type="checkbox"]').forEach(x=>x.checked=false);$('cInjuryDetails').hidden=true;$('feedback').textContent='Выбор второго модуля очищен.';
 });
-
 function gcsDescription(score){const n=Number(score);if(!score)return '';if(n===15)return '15 баллов: максимальная сумма по ШКГ';if(n>=13)return '13–14 баллов: лёгкое нарушение по сумме ШКГ';if(n>=9)return '9–12 баллов: умеренное нарушение по сумме ШКГ';return '3–8 баллов: тяжёлое нарушение по сумме ШКГ'}
 function updateGcsLevel(){
  const hidden=$('gcs'),el=$('gcsLevel'),manual=$('gcsManualMode').checked;
