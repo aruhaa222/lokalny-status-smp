@@ -115,50 +115,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #f29aa0;outline-offset
 </section>
 
 </div>
-<section class="module" id="clinical">
-<h2>2. Уточняющий клинический модуль</h2>
-<p class="muted">Выбери подходящий раздел: травма, живот, рана, ожог или конечность / сустав. Заполняй только то, что осмотрено.</p>
-<div class="tabs" role="group" aria-label="Клинические модули">
-<button class="tab" data-tab="injury" aria-pressed="true">Травма</button><button class="tab" data-tab="abdomen" aria-pressed="false">Живот</button><button class="tab" data-tab="wound" aria-pressed="false">Рана</button><button class="tab" data-tab="burn" aria-pressed="false">Ожог</button><button class="tab" data-tab="limb" aria-pressed="false">Конечность / сустав</button>
-</div>
-<div class="pane" data-pane="injury">
-<div class="grid2">
-<div class="field"><label for="iType">Вид травмы</label><select id="iType"><option value="">Не указано</option><option>Ушиб</option><option>Растяжение / повреждение связок</option><option>Подозрение на перелом</option><option>Подозрение на вывих</option><option>Сдавление</option><option>Резаная травма</option><option>Уколотая травма</option><option>Рваная травма</option><option>Укус</option><option>Сочетанная травма</option><option>Другое повреждение</option></select></div>
-<div class="field"><label for="iMechanism">Механизм / обстоятельства</label><input id="iMechanism" placeholder="Например, падение"></div>
-<div class="field"><label for="iLocation">Область повреждения</label><select id="iLocation"><option value="">Выбрать область</option><option>Голова</option><option>Лицо</option><option>Шея</option><option>Грудная клетка</option><option>Спина</option><option>Поясничная область</option><option>Таз</option><option>Плечо</option><option>Предплечье</option><option>Кисть</option><option>Бедро</option><option>Колено</option><option>Голень</option><option>Стопа</option><option>Другое</option></select></div>
-<div class="field"><label for="iSide">Сторона</label><select id="iSide"><option value="">Не указана</option><option>Справа</option><option>Слева</option><option>С обеих сторон</option><option>По средней линии</option></select></div>
-<div class="field"><label for="iBoneSegment">Сегмент кости (если применимо)</label><select id="iBoneSegment"><option value="">Не указан</option><option>Проксимальный отдел</option><option>Верхняя треть</option><option>Средняя треть (диафиз)</option><option>Нижняя треть</option><option>Дистальный отдел</option><option>Эпифиз</option><option>Метафиз</option></select></div>
-<div class="field"><label for="iLocationExtra">Уточнение локализации (необязательно)</label><input id="iLocationExtra" placeholder="Например, наружная поверхность"></div>
-<div class="field"><label for="iTime">Время травмы</label><input id="iTime" placeholder="Если известно"></div>
-<div class="field"><label for="iLength">Длина (см)</label><input id="iLength" inputmode="decimal"></div>
-<div class="field"><label for="iWidth">Ширина (см)</label><input id="iWidth" inputmode="decimal"></div>
-</div>
-<div class="field"><label for="iSigns">Внешние признаки</label><textarea id="iSigns" placeholder="Отёк, гематома, деформация, ссадины"></textarea></div>
-<div class="field"><label for="iPain">Болезненность</label><select id="iPain"><option value="">Не указано</option><option>При пальпации</option><option>При движении</option><option>В покое</option><option>При пальпации и движении</option><option>Не выявлена при проведённой проверке</option></select></div>
-<div class="checks"><label class="check"><input type="checkbox" id="iDeform">Видимая деформация</label><label class="check"><input type="checkbox" id="iEdema">Отёк</label><label class="check"><input type="checkbox" id="iHematoma">Гематома</label><label class="check"><input type="checkbox" id="iOpen">Нарушение целостности кожи</label><label class="check"><input type="checkbox" id="iMotion">Ограничение движений</label><label class="check"><input type="checkbox" id="iNV">Дистальные чувствительность / кровообращение оценены</label></div>
-</div>
-<div class="pane" data-pane="abdomen" hidden>
-<div class="grid2"><div class="field"><label for="aLocation">Область живота</label><select id="aLocation"><option value="">Выбрать область</option><option>Правое подреберье</option><option>Эпигастральная область</option><option>Левое подреберье</option><option>Правая боковая область</option><option>Околопупочная область</option><option>Левая боковая область</option><option>Правая подвздошная область</option><option>Надлобковая область</option><option>Левая подвздошная область</option><option>Область живота диффузно</option><option>Несколько областей</option></select></div><div class="field"><label for="aDuration">Длительность</label><input id="aDuration"></div><div class="field"><label for="aCharacter">Характер боли по словам пациента</label><input id="aCharacter"></div><div class="field"><label for="aRadiation">Иррадиация</label><input id="aRadiation"></div></div>
-<div class="field"><label for="aPalp">Данные пальпации</label><textarea id="aPalp" placeholder="Локальная болезненность, напряжение мышц и т. п."></textarea></div>
-<div class="grid2"><div class="field"><label for="aRebound">Симптом раздражения брюшины</label><select id="aRebound"><option value="">Не оценивался / не указано</option><option>Положительный</option><option>Отрицательный при проверке</option></select></div><div class="field"><label for="aMurphy">Симптом Мёрфи</label><select id="aMurphy"><option value="">Не оценивался / не указано</option><option>Положительный</option><option>Отрицательный при проверке</option></select></div><div class="field"><label for="aRovsing">Симптом Ровзинга</label><select id="aRovsing"><option value="">Не оценивался / не указано</option><option>Положительный</option><option>Отрицательный при проверке</option></select></div><div class="field"><label for="aPsoas">Псоас-симптом</label><select id="aPsoas"><option value="">Не оценивался / не указано</option><option>Положительный</option><option>Отрицательный при проверке</option></select></div><div class="field"><label for="aPastern">Симптом поколачивания</label><select id="aPastern"><option value="">Не оценивался / не указано</option><option>Положительный справа</option><option>Положительный слева</option><option>Положительный с двух сторон</option><option>Отрицательный справа</option><option>Отрицательный слева</option><option>Отрицательный с двух сторон</option></select></div><div class="field"><label for="aExtra">Дополнительные данные</label><input id="aExtra" placeholder="Перистальтика, вздутие и др."></div></div>
-</div>
-<div class="pane" data-pane="wound" hidden>
-<div class="grid2"><div class="field"><label for="wType">Тип повреждения</label><select id="wType"><option value="">Не указано</option><option>Резаная</option><option>Рваная</option><option>Уколотая</option><option>Ушибленная</option><option>Укус</option><option>Ссадина</option><option>Другое</option></select></div><div class="field"><label for="wLocation">Область раны</label><select id="wLocation"><option value="">Выбрать область</option><option>Голова</option><option>Лицо</option><option>Шея</option><option>Грудная клетка</option><option>Живот</option><option>Спина</option><option>Таз</option><option>Плечо</option><option>Предплечье</option><option>Кисть</option><option>Бедро</option><option>Голень</option><option>Стопа</option><option>Другое</option></select></div>
-<div class="field"><label for="wSide">Сторона</label><select id="wSide"><option value="">Не указана</option><option>Справа</option><option>Слева</option><option>По средней линии</option><option>С обеих сторон</option></select></div>
-<div class="field"><label for="wLocationExtra">Уточнение локализации</label><input id="wLocationExtra" placeholder="Например, передняя поверхность голени"></div><div class="field"><label for="wLength">Длина (см)</label><input id="wLength" inputmode="decimal"></div><div class="field"><label for="wWidth">Ширина (см)</label><input id="wWidth" inputmode="decimal"></div></div>
-<div class="grid2"><div class="field"><label for="wDepth">Глубина</label><input id="wDepth" placeholder="Если оценена"></div><div class="field"><label for="wBleed">Кровотечение</label><input id="wBleed" placeholder="Наблюдаемый характер"></div></div><div class="field"><label for="wEdges">Края, дно и окружающие ткани</label><textarea id="wEdges"></textarea></div>
-</div>
-<div class="pane" data-pane="burn" hidden>
-<div class="grid2"><div class="field"><label for="bCause">Фактор</label><input id="bCause" placeholder="Если известен"></div><div class="field"><label for="bLocation">Область ожога</label><select id="bLocation"><option value="">Выбрать область</option><option>Голова и шея</option><option>Передняя поверхность туловища</option><option>Задняя поверхность туловища</option><option>Правая верхняя конечность</option><option>Левая верхняя конечность</option><option>Правая нижняя конечность</option><option>Левая нижняя конечность</option><option>Промежность</option><option>Несколько областей</option><option>Другое</option></select></div><div class="field"><label for="bArea">Оценённая площадь (%)</label><input id="bArea" inputmode="decimal"></div><div class="field"><label for="bDepth">Степень / глубина</label><input id="bDepth" placeholder="Если определена"></div></div><div class="field"><label for="bAppearance">Внешний вид</label><textarea id="bAppearance"></textarea></div>
-</div>
-<div class="pane" data-pane="limb" hidden>
-<div class="grid2"><div class="field"><label for="lLocation">Конечность / анатомическая область</label><select id="lLocation"><option value="">Выбрать область</option><option>Плечевой сустав</option><option>Плечо</option><option>Локтевой сустав</option><option>Предплечье</option><option>Лучезапястный сустав</option><option>Кисть</option><option>Тазобедренный сустав</option><option>Бедро</option><option>Коленный сустав</option><option>Голень</option><option>Голеностопный сустав</option><option>Стопа</option><option>Другое</option></select></div>
-<div class="field"><label for="lSide">Сторона</label><select id="lSide"><option value="">Не указана</option><option>Справа</option><option>Слева</option><option>С обеих сторон</option></select></div>
-<div class="field"><label for="lBoneSegment">Сегмент кости (если применимо)</label><select id="lBoneSegment"><option value="">Не указан</option><option>Проксимальный отдел</option><option>Верхняя треть</option><option>Средняя треть (диафиз)</option><option>Нижняя треть</option><option>Дистальный отдел</option><option>Эпифиз</option><option>Метафиз</option></select></div><div class="field"><label for="lCirc">Окружность (см)</label><input id="lCirc" inputmode="decimal"></div><div class="field"><label for="lMotion">Движения</label><input id="lMotion"></div><div class="field"><label for="lDistal">Дистальное кровообращение / чувствительность</label><input id="lDistal"></div></div><div class="field"><label for="lExtra">Дополнительные находки</label><textarea id="lExtra"></textarea></div>
-</div>
-<div class="field"><label for="mExtra">Дополнение к выбранному модулю</label><textarea id="mExtra" placeholder="Дополнительные фактические находки"></textarea></div>
-<div class="btnrow"><button class="btn primary" id="addModule">Добавить данные модуля в локалку</button><button class="btn ghost" id="clearModule">Очистить модуль</button></div>
-</section>
+
 <section class="card">
 <h2>3. Готовая локалка</h2>
 <p class="muted">После выбора признаков нажми «Сформировать локальный статус», проверь текст и скопируй. Неотмеченные находки не добавляются.</p>
@@ -171,81 +128,6 @@ input:focus,select:focus,textarea:focus{outline:2px solid #f29aa0;outline-offset
 <script>
 const $=id=>document.getElementById(id);
 const val=id=>{const e=$(id);return e&&e.value?e.value.trim():''};
-const add=(arr,label,v)=>{if(v)arr.push(label+': '+v)};
-const checked=id=>!!($(id)&&$(id).checked);
-function makeModule(){
- const active=document.querySelector('[data-tab][aria-pressed="true"]');
- const type=active?active.dataset.tab:'injury';
- const parts=[];
- const addText=v=>{if(v)parts.push(v.replace(/[.;,\\s]+$/,'').trim())};
- const location=(...ids)=>ids.map(val).filter(Boolean).join(', ');
- const dimensions=(length,width)=>[length?'длина '+length+' см':'',width?'ширина '+width+' см':''].filter(Boolean).join(', ');
- if(type==='injury'){
-  const kind=val('iType'),place=location('iLocation','iSide','iBoneSegment','iLocationExtra');
-  const signs=[];
-  if(checked('iDeform'))signs.push('деформация');
-  if(checked('iEdema'))signs.push('отёк');
-  if(checked('iHematoma'))signs.push('гематома');
-  if(checked('iOpen'))signs.push('нарушение целостности кожных покровов');
-  if(checked('iMotion'))signs.push('ограничение движений');
-  if(val('iSigns'))signs.push(val('iSigns').replace(/[.;,\\s]+$/,''));
-  const pain=val('iPain');
-  let opening='';
-  if(kind==='Подозрение на перелом')opening='При осмотре отмечается травма';
-  else if(kind==='Подозрение на вывих')opening='При осмотре отмечаются признаки возможного вывиха';
-  else if(['Резаная травма','Уколотая травма','Рваная травма','Укус'].includes(kind))opening='При осмотре отмечается '+kind.toLowerCase()+' рана';
-  else if(kind==='Ушиб')opening='При осмотре отмечается ушиб';
-  else if(kind==='Растяжение / повреждение связок')opening='При осмотре отмечаются признаки повреждения связочного аппарата';
-  else if(kind==='Сдавление')opening='При осмотре отмечаются последствия сдавления';
-  else if(kind==='Сочетанная травма')opening='При осмотре отмечаются признаки сочетанной травмы';
-  else if(kind)opening='При осмотре отмечается '+kind.toLowerCase();
-  else opening='При осмотре';
-  let sentence=opening;
-  if(place)sentence+=' в области '+place;
-  if(signs.length)sentence+=(kind?'':' отмечаются')+(kind?' с признаками: ':' следующие признаки: ')+signs.join(', ');
-  if(pain)sentence+=(signs.length?'; ':'; ')+'болезненность '+pain.toLowerCase();
-  if(sentence!==opening||kind)addText(sentence);
-  if(val('iMechanism'))addText('Со слов пациента, травма получена '+val('iMechanism'));
-  if(val('iTime'))addText('Время получения травмы: '+val('iTime'));
-  const size=dimensions(val('iLength'),val('iWidth'));if(size)addText('Размеры повреждения: '+size);
-  if(checked('iNV'))addText('Дистальная чувствительность и периферическое кровообращение оценены');
- }
- if(type==='abdomen'){
-  const place=val('aLocation'),duration=val('aDuration'),character=val('aCharacter'),radiation=val('aRadiation');
-  const pain=[duration?'длительность '+duration:'',character?'характер '+character:'',radiation?'иррадиация '+radiation:''].filter(Boolean).join(', ');
-  if(place)addText('Болевые ощущения локализуются: '+place);
-  if(pain)addText('Со слов пациента: '+pain);
-  if(val('aPalp'))addText('При пальпации живота: '+val('aPalp'));
-  [['aRebound','Симптом раздражения брюшины'],['aMurphy','Симптом Мёрфи'],['aRovsing','Симптом Ровзинга'],['aPsoas','Псоас-симптом'],['aPastern','Симптом поколачивания']].forEach(([id,label])=>{if(val(id))addText(label+': '+val(id).toLowerCase())});
-  if(val('aExtra'))addText('Дополнительно: '+val('aExtra'));
- }
- if(type==='wound'){
-  const kind=val('wType'),place=location('wLocation','wSide','wLocationExtra');
-  if(kind||place)addText('Имеется '+(kind?kind.toLowerCase()+' рана':'рана')+(place?' в области '+place:''));
-  const size=dimensions(val('wLength'),val('wWidth'));if(size)addText('Размеры раны: '+size);
-  if(val('wDepth'))addText('Глубина раны: '+val('wDepth'));
-  if(val('wBleed'))addText('Кровотечение: '+val('wBleed').toLowerCase());
-  if(val('wEdges'))addText('Состояние краёв, дна раны и окружающих тканей: '+val('wEdges'));
- }
- if(type==='burn'){
-  if(val('bCause'))addText('Ожог получен вследствие воздействия: '+val('bCause'));
-  if(val('bLocation'))addText('Ожоговая поверхность расположена: '+val('bLocation').toLowerCase());
-  if(val('bArea'))addText('Оценочная площадь поражения составляет '+val('bArea')+'%');
-  if(val('bDepth'))addText('Степень / глубина поражения: '+val('bDepth'));
-  if(val('bAppearance'))addText('При осмотре: '+val('bAppearance'));
- }
- if(type==='limb'){
-  const place=location('lLocation','lSide','lBoneSegment');
-  if(place)addText('В области '+place+' отмечаются следующие изменения');
-  if(val('lCirc'))addText('Окружность конечности на уровне измерения составляет '+val('lCirc')+' см');
-  if(val('lMotion'))addText('Объём и характер движений: '+val('lMotion'));
-  if(val('lDistal'))addText('Дистальное кровообращение и чувствительность: '+val('lDistal'));
-  if(val('lExtra'))addText('Дополнительные данные осмотра: '+val('lExtra'));
- }
- if(val('mExtra'))addText(val('mExtra'));
- return parts.length?parts.join('. ')+'.':'';
-}
-document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));document.querySelectorAll('[data-pane]').forEach(p=>p.hidden=p.dataset.pane!==b.dataset.tab)}));
 function build(){return val('general')}
 function gcsDescription(score){const n=Number(score);if(!score)return '';if(n===15)return '15 баллов: максимальная сумма по ШКГ';if(n>=13)return '13–14 баллов: лёгкое нарушение по сумме ШКГ';if(n>=9)return '9–12 баллов: умеренное нарушение по сумме ШКГ';return '3–8 баллов: тяжёлое нарушение по сумме ШКГ'}
 function updateGcsLevel(){
@@ -276,7 +158,5 @@ $('clearLocal').addEventListener('click',()=>{['conscious','orientation','answer
 $('generate').addEventListener('click',()=>{$('output').value=build()||'Заполни хотя бы одно поле.';$('feedback').textContent='Проверь текст перед использованием.'});
 $('copy').addEventListener('click',async()=>{const txt=$('output').value;if(!txt||txt.startsWith('Заполни')){$('feedback').textContent='Сначала сформируй статус.';return}try{await navigator.clipboard.writeText(txt);$('feedback').textContent='Текст скопирован.'}catch(e){const r=document.createElement('textarea');r.value=txt;document.body.appendChild(r);r.select();const ok=document.execCommand('copy');r.remove();$('feedback').textContent=ok?'Текст скопирован.':'Не удалось скопировать. Выдели текст вручную.'}});
 $('clear').addEventListener('click',()=>{document.querySelectorAll('input,textarea,select').forEach(e=>{if(e.type==='checkbox')e.checked=false;else e.value=''});$('output').value='';$('feedback').textContent='Поля очищены.'});
-$('addModule').addEventListener('click',()=>{const t=makeModule();if(!t){$('feedback').textContent='Заполни поле или отметь находку в клиническом модуле.';return}const current=$('general').value.trim();$('general').value=current?current+'\n\n'+t:t;$('output').value=$('general').value;$('feedback').textContent='Данные клинического модуля добавлены. Готовая локалка обновлена.'});
-$('clearModule').addEventListener('click',()=>{document.querySelectorAll('[data-pane] input,[data-pane] textarea,[data-pane] select,#mExtra').forEach(e=>{if(e.type==='checkbox')e.checked=false;else e.value=''});$('feedback').textContent='Поля клинического модуля очищены.'});
 </script>
 </body></html>
